@@ -1,0 +1,43 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart TB
+  subgraph Android["Android emulator / device"]
+    direction TB
+    UI[Compose UI<br/>Login / Signup / Home / Chat / Tickets]
+    VM[AppViewModel<br/>StateFlow]
+    NM[Retrofit + OkHttp<br/>Moshi]
+    DS[(DataStore<br/>JWT)]
+    UI <--> VM
+    VM <--> NM
+    VM <--> DS
+  end
+
+  subgraph Backend["Python backend (uvicorn)"]
+    direction TB
+    API[FastAPI routers<br/>auth / chat / tickets]
+    SEC[Security<br/>JWT + bcrypt]
+    ORCH[Orchestrator<br/>LangGraph top-graph]
+    AGENTS[Department agents<br/>5 specialised LLMs]
+    TOOLS[Per-dept tool builders<br/>StructuredTool]
+    SEED[Seed]
+    DB[(SQLite<br/>university_mock.db)]
+    API --> SEC
+    API --> ORCH
+    ORCH --> AGENTS
+    AGENTS --> TOOLS
+    TOOLS --> DB
+    SEED --> DB
+  end
+
+  NIM[(NVIDIA NIM<br/>OpenAI-compatible<br/>openai/gpt-oss-120b)]
+
+  NM -- "HTTP + JWT" --> API
+  AGENTS -- "LangChain ChatOpenAI" --> NIM
+
+  classDef mobile fill:#CFE3FF,stroke:#111111,color:#111111
+  classDef api fill:#FFE3B5,stroke:#111111,color:#111111
+  classDef agent fill:#CFF3D7,stroke:#111111,color:#111111
+  classDef store fill:#EBD8FF,stroke:#111111,color:#111111
+  class UI,VM,NM,DS mobile
+  class API,SEC,SEED api
+  class ORCH,AGENTS,TOOLS agent
+  class DB,NIM store

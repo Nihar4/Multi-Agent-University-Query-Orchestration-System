@@ -1,0 +1,28 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+sequenceDiagram
+  autonumber
+  actor Student
+  participant App
+  participant Auth as /auth/login
+  participant Sec as security.py
+  participant DB
+  participant Any as protected endpoint
+
+  Student->>App: email + password
+  App->>Auth: POST email password
+  Auth->>DB: SELECT student WHERE email
+  DB-->>Auth: row + bcrypt hash
+  Auth->>Sec: verify_password
+  Sec-->>Auth: ok
+  Auth->>Sec: create_access_token
+  Sec-->>Auth: JWT HS256 24h
+  Auth-->>App: access_token student_id name email
+  App->>App: DataStore.save(token)
+  Note over App: subsequent requests
+  App->>Any: Authorization Bearer token
+  Any->>Sec: get_current_student
+  Sec->>Sec: jwt.decode
+  Sec->>DB: SELECT student WHERE id=sub
+  DB-->>Sec: Student row
+  Sec-->>Any: current student
+  Any-->>App: response

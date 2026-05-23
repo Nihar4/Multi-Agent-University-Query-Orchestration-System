@@ -1,0 +1,20 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+sequenceDiagram
+  autonumber
+  participant Sub as Dept sub-graph
+  participant LLM as ChatOpenAI bind_tools
+  participant TN as ToolNode
+  participant Py as Python tool fn
+  participant DB
+
+  Sub->>LLM: messages + tool schemas
+  LLM-->>Sub: assistant w/ tool_calls=[reg_check_enrollment_eligibility]
+  Sub->>TN: route to tools
+  TN->>Py: reg_check_enrollment_eligibility(db student_id CS301)
+  Py->>DB: SELECT course / holds / prereqs / grades
+  DB-->>Py: rows
+  Py-->>TN: dict result
+  TN-->>Sub: ToolMessage JSON
+  Sub->>LLM: messages now include tool result
+  LLM-->>Sub: assistant message no more tool_calls
+  Note over Sub: loop ends last message is the answer (may contain ESCALATE)

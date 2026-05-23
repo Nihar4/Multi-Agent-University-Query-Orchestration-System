@@ -1,0 +1,66 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart LR
+  subgraph entry["entry"]
+    main[main.py]
+    config[config.py]
+  end
+
+  subgraph api["api/"]
+    auth[auth.py]
+    chat[chat.py]
+    tickets[tickets.py]
+  end
+
+  subgraph core["core"]
+    sec[security.py]
+    db[database.py]
+    models[models.py]
+    schemas[schemas.py]
+    seed[seed.py]
+  end
+
+  subgraph agents["agents/"]
+    orch[orchestrator.py]
+    grph[graph.py]
+    kb[knowledge_base.py]
+    tools[tools.py]
+    lctools[lc_tools.py]
+    lcllm[lc_llm.py]
+    llmc[llm_client.py]
+  end
+
+  main --> config
+  main --> auth
+  main --> chat
+  main --> tickets
+  main --> seed
+  auth --> sec
+  auth --> models
+  auth --> schemas
+  chat --> sec
+  chat --> orch
+  chat --> schemas
+  tickets --> sec
+  tickets --> models
+  tickets --> schemas
+  sec --> models
+  sec --> db
+  seed --> models
+  seed --> db
+  orch --> grph
+  grph --> kb
+  grph --> lctools
+  grph --> lcllm
+  grph --> models
+  lctools --> tools
+  tools --> models
+  models --> db
+
+  classDef entry fill:#FFE3B5,stroke:#111111,color:#111111
+  classDef api fill:#FFE3B5,stroke:#111111,color:#111111
+  classDef core fill:#EBD8FF,stroke:#111111,color:#111111
+  classDef agents fill:#CFF3D7,stroke:#111111,color:#111111
+  class main,config entry
+  class auth,chat,tickets api
+  class sec,db,models,schemas,seed core
+  class orch,grph,kb,tools,lctools,lcllm,llmc agents

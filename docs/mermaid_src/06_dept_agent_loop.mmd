@@ -1,0 +1,13 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+stateDiagram-v2
+  direction LR
+  [*] --> Agent
+  Agent: agent_node\nllm.bind_tools(dept_tools)
+  Agent --> Decision
+  Decision: needs tools?
+  Decision --> Tools: yes - has tool_calls
+  Decision --> Final: no
+  Tools: ToolNode\nexecute DB-scoped tools
+  Tools --> Agent
+  Final: final assistant message\n(may contain ESCALATE tag)
+  Final --> [*]

@@ -44,3 +44,13 @@ ui_test_screens/
 # OS junk
 Thumbs.db
 desktop.ini
+
+# Node modules (docs/ uses npm for mermaid-cli + docx)
+node_modules/
+package-lock.json
+
+# Word / Excel temporary lock files
+~$*.docx
+~$*.xlsx
+~$*.doc
+~$*.xls

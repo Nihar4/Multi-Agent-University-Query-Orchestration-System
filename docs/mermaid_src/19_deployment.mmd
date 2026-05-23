@@ -1,0 +1,24 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart TB
+  subgraph laptop["Developer laptop (Windows)"]
+    direction TB
+    subgraph py["Python venv"]
+      uvicorn[uvicorn :8000<br/>FastAPI app]
+      sqlite[(university_mock.db<br/>SQLite file)]
+      uvicorn --- sqlite
+    end
+    subgraph emul["Android emulator (Pixel 6 API 34)"]
+      apk[com.example.final_project<br/>debug APK]
+    end
+    apk -- "http://10.0.2.2:8000" --> uvicorn
+  end
+
+  cloud[(NVIDIA NIM cloud<br/>openai/gpt-oss-120b<br/>OpenAI-compatible)]
+  uvicorn -- HTTPS --> cloud
+
+  classDef laptop fill:#CFE3FF,stroke:#111111,color:#111111
+  classDef py fill:#FFE3B5,stroke:#111111,color:#111111
+  classDef store fill:#EBD8FF,stroke:#111111,color:#111111
+  class uvicorn,apk laptop
+  class py py
+  class sqlite,cloud store

@@ -1,0 +1,30 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+sequenceDiagram
+  autonumber
+  actor Student
+  participant App
+  participant API as FastAPI /chat
+  participant Top as Top StateGraph
+  participant Cls as Classifier LLM
+  participant Adv as Advising agent
+  participant Fin as Financial agent
+  participant Syn as Synthesizer LLM
+  participant DB
+
+  Student->>App: question
+  App->>API: POST /chat
+  API->>Top: handle_question
+  Top->>Cls: classify
+  Cls-->>Top: kind=multi depts=[ADVISING FINANCIAL]
+  Top->>Adv: run sub-graph
+  Adv->>DB: graduation_progress + transcript
+  Adv-->>Top: advising slice
+  Top->>Fin: run sub-graph
+  Fin->>DB: account + holds
+  Fin-->>Top: financial slice
+  Top->>Syn: combine slices
+  Syn-->>Top: unified reply
+  Top->>DB: persist chat
+  Top-->>API: routed_to=[ADVISING FINANCIAL] ticket_ids=[]
+  API-->>App: response
+  App-->>Student: bubble with via ADVISING + FINANCIAL chip

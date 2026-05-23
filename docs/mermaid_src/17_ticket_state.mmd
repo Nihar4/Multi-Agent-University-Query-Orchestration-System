@@ -1,0 +1,9 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+stateDiagram-v2
+  [*] --> open : created by agent
+  open --> in_progress : staff picks it up
+  in_progress --> resolved : staff resolves
+  in_progress --> open : student replies
+  resolved --> closed : auto-close after N days
+  resolved --> in_progress : student re-replies
+  closed --> [*]

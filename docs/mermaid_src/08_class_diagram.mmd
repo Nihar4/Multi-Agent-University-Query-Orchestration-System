@@ -1,0 +1,109 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+classDiagram
+  class Student {
+    +int id
+    +str email
+    +str password_hash
+    +str full_name
+    +str student_number
+    +str major
+    +int year
+    +float gpa
+    +str academic_standing
+    +int credits_completed
+  }
+  class Department {
+    +int id
+    +str code
+    +str name
+    +str contact_email
+    +str description
+  }
+  class Course {
+    +int id
+    +str code
+    +str name
+    +int credits
+  }
+  class Prerequisite {
+    +int course_id
+    +int prereq_course_id
+  }
+  class Enrollment {
+    +int student_id
+    +int course_id
+    +str term
+    +str status
+  }
+  class Grade {
+    +int student_id
+    +int course_id
+    +str term
+    +str grade
+  }
+  class Hold {
+    +int student_id
+    +int department_id
+    +str hold_type
+    +str reason
+    +bool active
+  }
+  class FinancialRecord {
+    +int student_id
+    +float balance_due
+    +float scholarships
+    +datetime payment_due_date
+  }
+  class ITAccount {
+    +int student_id
+    +str sso_status
+    +int email_used_mb
+    +bool wifi_enabled
+  }
+  class HousingRecord {
+    +int student_id
+    +str building
+    +str room
+    +str meal_plan
+    +float dining_balance
+  }
+  class GraduationRequirement {
+    +str major
+    +int required_course_id
+    +str category
+  }
+  class Ticket {
+    +int student_id
+    +int department_id
+    +str subject
+    +str summary
+    +str status
+  }
+  class TicketMessage {
+    +int ticket_id
+    +str sender
+    +str body
+  }
+  class ChatMessage {
+    +int student_id
+    +str role
+    +str content
+    +str routed_to
+    +int ticket_id
+  }
+
+  Student "1" --> "*" Enrollment
+  Student "1" --> "*" Grade
+  Student "1" --> "*" Hold
+  Student "1" --> "1" FinancialRecord
+  Student "1" --> "1" ITAccount
+  Student "1" --> "1" HousingRecord
+  Student "1" --> "*" Ticket
+  Student "1" --> "*" ChatMessage
+  Department "1" --> "*" Hold
+  Department "1" --> "*" Ticket
+  Course "1" --> "*" Enrollment
+  Course "1" --> "*" Grade
+  Course "1" --> "*" Prerequisite
+  Course "1" --> "*" GraduationRequirement
+  Ticket "1" --> "*" TicketMessage

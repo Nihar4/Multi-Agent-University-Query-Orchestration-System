@@ -1,0 +1,37 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart LR
+  S((Student))
+  D((Department<br/>staff))
+
+  subgraph sys["University Multi-Agent System"]
+    U1((Sign up))
+    U2((Log in))
+    U3((View profile))
+    U4((Ask question<br/>natural language))
+    U5((Get crisp answer<br/>single dept))
+    U6((Get combined answer<br/>multi dept))
+    U7((Auto-open<br/>1+ tickets))
+    U8((View ticket list))
+    U9((View ticket detail))
+    U10((Reply on ticket))
+    U11((View chat history))
+    U12((Handle ticket))
+  end
+
+  S --> U1
+  S --> U2
+  S --> U3
+  S --> U4
+  S --> U8
+  S --> U9
+  S --> U10
+  S --> U11
+  U4 --> U5
+  U4 --> U6
+  U4 --> U7
+  D --> U12
+
+  classDef actor fill:#CFE3FF,stroke:#111111,color:#111111
+  classDef uc fill:#CFF3D7,stroke:#111111,color:#111111
+  class S,D actor
+  class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12 uc

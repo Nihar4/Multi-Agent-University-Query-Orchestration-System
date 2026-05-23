@@ -1,0 +1,17 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+stateDiagram-v2
+  [*] --> Login : token missing
+  [*] --> Home  : token present
+  Login --> Home : success
+  Login --> Signup : Sign up
+  Signup --> Home : success
+  Signup --> Login : Sign in
+  Home --> Chat : Ask the assistant
+  Home --> Tickets : My tickets
+  Home --> Login : Sign out
+  Chat --> TicketDetail : tap View ticket
+  Tickets --> TicketDetail : tap a card
+  TicketDetail --> Chat : back
+  TicketDetail --> Tickets : back
+  Chat --> Home : back
+  Tickets --> Home : back

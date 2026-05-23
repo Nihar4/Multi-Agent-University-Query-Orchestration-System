@@ -1,0 +1,36 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+sequenceDiagram
+  autonumber
+  actor Student
+  participant App
+  participant API as FastAPI /chat
+  participant Top as Top StateGraph
+  participant Cls as Classifier LLM
+  participant Reg as Registrar agent
+  participant Fin as Financial agent
+  participant Hou as Housing agent
+  participant Syn as Synthesizer LLM
+  participant Tk as create_tickets_node
+  participant DB
+
+  Student->>App: I need to defer for a semester
+  App->>API: POST /chat
+  API->>Top: handle_question
+  Top->>Cls: classify
+  Note over Cls: rule defer -> multi
+  Cls-->>Top: kind=multi depts=[REG FIN HOUSING]
+  Top->>Reg: run sub-graph
+  Reg-->>Top: answer + ESCALATE
+  Top->>Fin: run sub-graph
+  Fin-->>Top: answer + ESCALATE
+  Top->>Hou: run sub-graph
+  Hou-->>Top: answer + ESCALATE
+  Top->>Syn: combine 3 slices
+  Syn-->>Top: unified reply
+  Top->>Tk: create 1 ticket per ESCALATE
+  Tk->>DB: INSERT tickets x3
+  Tk-->>Top: ticket_ids=[42 43 44]
+  Top->>DB: persist chat
+  Top-->>API: routed_to=[REG FIN HOUSING] ticket_ids=[42 43 44]
+  API-->>App: response
+  App-->>Student: bubble + View ticket links

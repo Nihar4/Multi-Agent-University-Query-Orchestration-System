@@ -1,0 +1,12 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart LR
+  A[Identity and rules<br/>e.g. You are the IT Help Desk agent]
+  B[Department knowledge base<br/>knowledge_base.py KB_BY_CODE]
+  C[Student context<br/>name / id / major / year / GPA]
+  P[System prompt sent to LLM]
+  A --> P
+  B --> P
+  C --> P
+
+  classDef p fill:#CFF3D7,stroke:#111111,color:#111111
+  class A,B,C,P p

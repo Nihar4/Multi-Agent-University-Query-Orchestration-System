@@ -1,0 +1,21 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart LR
+  U[Student<br/>plain English] -- HTTPS+JWT --> CH[/chat endpoint/]
+  CH -- question + student_id --> G[LangGraph state]
+  G -- system prompts --> LLM[NVIDIA NIM]
+  LLM -- tool_calls --> G
+  G -- typed args --> T[Tool functions]
+  T -- SELECT --> SQL[(SQLite)]
+  SQL -- rows --> T
+  T -- JSON --> G
+  G -- chat history --> SQL
+  G -- tickets --> SQL
+  G -- final answer --> CH
+  CH -- JSON --> U
+
+  classDef io fill:#CFE3FF,stroke:#111111,color:#111111
+  classDef proc fill:#CFF3D7,stroke:#111111,color:#111111
+  classDef store fill:#EBD8FF,stroke:#111111,color:#111111
+  class U,CH io
+  class G,T,LLM proc
+  class SQL store

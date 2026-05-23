@@ -1,0 +1,34 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+sequenceDiagram
+  autonumber
+  actor Student
+  participant App as Android (Compose)
+  participant API as FastAPI /chat
+  participant Top as Top StateGraph
+  participant Cls as Classifier LLM
+  participant Reg as Registrar agent
+  participant Tool as ToolNode
+  participant DB as SQLite
+  participant NIM as NVIDIA NIM
+
+  Student->>App: types "what classes am I in?"
+  App->>API: POST /chat (JWT)
+  API->>Top: handle_question(student, msg)
+  Top->>Cls: classify
+  Cls->>NIM: completion
+  NIM-->>Cls: kind=single depts=[REGISTRAR]
+  Cls-->>Top: routing decision
+  Top->>Reg: run sub-graph
+  Reg->>NIM: chat w/ tools
+  NIM-->>Reg: tool_call(reg_get_current_enrollment)
+  Reg->>Tool: execute
+  Tool->>DB: SELECT enrollments WHERE student_id
+  DB-->>Tool: rows
+  Tool-->>Reg: enrolled_courses
+  Reg->>NIM: chat w/ tool result
+  NIM-->>Reg: You are currently enrolled in CS301 and CS370
+  Reg-->>Top: final answer
+  Top->>DB: INSERT chat_messages
+  Top-->>API: OrchestratorOutput
+  API-->>App: routed_to=[REGISTRAR] ticket_ids=[]
+  App-->>Student: bubble with via REGISTRAR chip

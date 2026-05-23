@@ -1,0 +1,118 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+erDiagram
+  STUDENT ||--o{ ENROLLMENT : has
+  STUDENT ||--o{ GRADE : earns
+  STUDENT ||--o{ HOLD : has
+  STUDENT ||--o{ TODO_ITEM : owns
+  STUDENT ||--|| FINANCIAL_RECORD : owns
+  STUDENT ||--|| IT_ACCOUNT : owns
+  STUDENT ||--|| HOUSING_RECORD : owns
+  STUDENT ||--o{ TICKET : opens
+  STUDENT ||--o{ CHAT_MESSAGE : sends
+  DEPARTMENT ||--o{ HOLD : issues
+  DEPARTMENT ||--o{ TICKET : owns
+  COURSE ||--o{ ENROLLMENT : in
+  COURSE ||--o{ GRADE : recorded_for
+  COURSE ||--o{ PREREQUISITE : has
+  COURSE ||--o{ GRADUATION_REQUIREMENT : counts_for
+  TICKET ||--o{ TICKET_MESSAGE : carries
+
+  STUDENT {
+    int id PK
+    string email
+    string password_hash
+    string full_name
+    string student_number
+    string major
+    int year
+    float gpa
+    string academic_standing
+  }
+  DEPARTMENT {
+    int id PK
+    string code
+    string name
+  }
+  COURSE {
+    int id PK
+    string code
+    string name
+    int credits
+  }
+  ENROLLMENT {
+    int id PK
+    int student_id FK
+    int course_id FK
+    string term
+    string status
+  }
+  GRADE {
+    int id PK
+    int student_id FK
+    int course_id FK
+    string term
+    string grade
+  }
+  HOLD {
+    int id PK
+    int student_id FK
+    int department_id FK
+    string hold_type
+    string reason
+    bool active
+  }
+  TODO_ITEM {
+    int id PK
+    int student_id FK
+    string title
+    bool completed
+  }
+  FINANCIAL_RECORD {
+    int id PK
+    int student_id FK
+    float balance_due
+    float scholarships
+  }
+  IT_ACCOUNT {
+    int id PK
+    int student_id FK
+    string sso_status
+    bool wifi_enabled
+  }
+  HOUSING_RECORD {
+    int id PK
+    int student_id FK
+    string building
+    string room
+    string meal_plan
+  }
+  PREREQUISITE {
+    int id PK
+    int course_id FK
+    int prereq_course_id FK
+  }
+  GRADUATION_REQUIREMENT {
+    int id PK
+    string major
+    int required_course_id FK
+  }
+  TICKET {
+    int id PK
+    int student_id FK
+    int department_id FK
+    string subject
+    string status
+  }
+  TICKET_MESSAGE {
+    int id PK
+    int ticket_id FK
+    string sender
+    string body
+  }
+  CHAT_MESSAGE {
+    int id PK
+    int student_id FK
+    string role
+    string content
+    string routed_to
+  }

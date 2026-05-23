@@ -1,0 +1,17 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart TD
+  S([START]) --> CLS[classify_node<br/>router LLM<br/>kind + departments]
+  CLS -- smalltalk --> ST[smalltalk_node<br/>general LLM]
+  CLS -- single / multi --> RUN[run_departments_node<br/>iterate selected dept agents]
+  RUN --> SYN[synthesize_node<br/>combine slices LLM]
+  SYN --> TIC[create_tickets_node<br/>one ticket per ESCALATE]
+  ST --> FIN[finalize_node<br/>persist + format]
+  TIC --> FIN
+  FIN --> E([END])
+
+  classDef llm fill:#CFF3D7,stroke:#111111,color:#111111
+  classDef det fill:#FFE3B5,stroke:#111111,color:#111111
+  classDef se fill:#EBD8FF,stroke:#111111,color:#111111
+  class CLS,ST,SYN llm
+  class RUN,TIC,FIN det
+  class S,E se

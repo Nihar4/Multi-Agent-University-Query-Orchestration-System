@@ -1,0 +1,18 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart TD
+  Q[student question] --> H1{contains<br/>greeting / thanks /<br/>goodbye / what can you do?}
+  H1 -- yes --> SM[smalltalk]
+  H1 -- no --> H2{contains<br/>defer / withdraw?}
+  H2 -- yes --> MM1[multi:<br/>REGISTRAR + FINANCIAL + HOUSING]
+  H2 -- no --> H3{contains transfer?}
+  H3 -- yes --> MM2[multi:<br/>REGISTRAR + FINANCIAL + ADVISING]
+  H3 -- no --> H4{contains<br/>change major / declare minor?}
+  H4 -- yes --> MM3[multi:<br/>ADVISING + REGISTRAR]
+  H4 -- no --> LLM[LLM classifier<br/>picks single or multi]
+
+  classDef cond fill:#FFE3B5,stroke:#111111,color:#111111
+  classDef out fill:#CFF3D7,stroke:#111111,color:#111111
+  classDef io fill:#CFE3FF,stroke:#111111,color:#111111
+  class H1,H2,H3,H4 cond
+  class SM,MM1,MM2,MM3,LLM out
+  class Q io

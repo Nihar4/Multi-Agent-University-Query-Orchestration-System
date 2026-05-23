@@ -1,0 +1,22 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+flowchart LR
+  Student((Student))
+  Staff((Department<br/>staff))
+  Sys[University<br/>Multi-Agent System]
+  NIM[NVIDIA NIM<br/>openai/gpt-oss-120b]
+  Mock[(Mock University<br/>data sources)]
+
+  Student -- asks any question --> Sys
+  Sys -- crisp answer / ticket --> Student
+  Sys -- LLM calls --> NIM
+  NIM -- tool calls / completions --> Sys
+  Sys -- read-only --> Mock
+  Sys -- routes tickets --> Staff
+  Staff -- replies on tickets --> Sys
+
+  classDef ext fill:#CFE3FF,stroke:#111111,color:#111111
+  classDef sys fill:#CFF3D7,stroke:#111111,color:#111111
+  classDef store fill:#EBD8FF,stroke:#111111,color:#111111
+  class Student,Staff ext
+  class Sys sys
+  class NIM,Mock store

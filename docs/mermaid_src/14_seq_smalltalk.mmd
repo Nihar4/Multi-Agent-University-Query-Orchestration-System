@@ -1,0 +1,21 @@
+%%{init: {'theme':'base','themeVariables':{'fontFamily':'Inter, Arial, sans-serif','primaryTextColor':'#111111','lineColor':'#111111','primaryBorderColor':'#111111'}}}%%
+sequenceDiagram
+  autonumber
+  actor Student
+  participant App
+  participant API as FastAPI /chat
+  participant Top as Top StateGraph
+  participant Cls as Classifier LLM
+  participant ST as Smalltalk LLM
+  participant DB
+
+  Student->>App: thanks!
+  App->>API: POST /chat
+  API->>Top: handle_question
+  Top->>Cls: classify
+  Cls-->>Top: kind=smalltalk depts=[]
+  Top->>ST: generate friendly reply
+  ST-->>Top: No problem let me know if you need anything
+  Top->>DB: persist chat (routed_to=GENERAL)
+  Top-->>API: routed_to=[GENERAL] ticket_ids=[]
+  API-->>App: response
